@@ -12,7 +12,7 @@
 -- ----------------------------
 -- Sequence structure for album_album_id_seq
 -- ----------------------------
-CREATE SEQUENCE "albums_id_seq"
+CREATE SEQUENCE IF NOT EXISTS "albums_id_seq"
  INCREMENT 1
  MINVALUE 1
  MAXVALUE 2147483647
@@ -24,7 +24,7 @@ SELECT setval('"public"."albums_id_seq"', 347, true);
 -- ----------------------------
 -- Sequence structure for artist_artist_id_seq
 -- ----------------------------
-CREATE SEQUENCE "artists_id_seq"
+CREATE SEQUENCE IF NOT EXISTS "artists_id_seq"
  INCREMENT 1
  MINVALUE 1
  MAXVALUE 2147483647
@@ -35,7 +35,7 @@ SELECT setval('"public"."artists_id_seq"', 275, true);
 -- ----------------------------
 -- Sequence structure for genre_genre_id_seq
 -- ----------------------------
-CREATE SEQUENCE "genres_id_seq"
+CREATE SEQUENCE IF NOT EXISTS "genres_id_seq"
  INCREMENT 1
  MINVALUE 1
  MAXVALUE 2147483647
@@ -47,7 +47,7 @@ SELECT setval('"public"."genres_id_seq"', 25, true);
 -- ----------------------------
 -- Sequence structure for mediatype_mediatype_id_seq
 -- ----------------------------
-CREATE SEQUENCE "mediatypes_id_seq"
+CREATE SEQUENCE IF NOT EXISTS "mediatypes_id_seq"
  INCREMENT 1
  MINVALUE 1
  MAXVALUE 2147483647
@@ -59,7 +59,7 @@ SELECT setval('"public"."mediatypes_id_seq"', 5, true);
 -- ----------------------------
 -- Sequence structure for playlist_playlist_id_seq
 -- ----------------------------
-CREATE SEQUENCE "playlists_id_seq"
+CREATE SEQUENCE IF NOT EXISTS "playlists_id_seq"
  INCREMENT 1
  MINVALUE 1
  MAXVALUE 2147483647
@@ -71,7 +71,7 @@ SELECT setval('"public"."playlists_id_seq"', 18, true);
 -- ----------------------------
 -- Sequence structure for track_track_id_seq
 -- ----------------------------
-CREATE SEQUENCE "tracks_id_seq"
+CREATE SEQUENCE IF NOT EXISTS "tracks_id_seq"
  INCREMENT 1
  MINVALUE 1
  MAXVALUE 2147483647
@@ -80,9 +80,9 @@ CREATE SEQUENCE "tracks_id_seq"
 SELECT setval('"public"."tracks_id_seq"', 3503, true);
 
 -- /*******************************************************************************
---    Create Tables
+--    CREATE TABLE IF NOT EXISTSs
 -- ********************************************************************************/
-CREATE TABLE albums
+CREATE TABLE IF NOT EXISTS albums
 (
     id int DEFAULT nextval('albums_id_seq'::regclass) NOT NULL,
     title VARCHAR(160) NOT NULL,
@@ -90,42 +90,42 @@ CREATE TABLE albums
     CONSTRAINT pk_albums PRIMARY KEY  (id)
 );
 
-CREATE TABLE artists
+CREATE TABLE IF NOT EXISTS artists
 (
     id int DEFAULT nextval('artists_id_seq'::regclass) NOT NULL,
     name VARCHAR(120),
     CONSTRAINT pk_artists PRIMARY KEY  (id)
 );
 
-CREATE TABLE genres
+CREATE TABLE IF NOT EXISTS genres
 (
     id int DEFAULT nextval('genres_id_seq'::regclass) NOT NULL,
     name VARCHAR(120),
     CONSTRAINT pk_genres PRIMARY KEY  (id)
 );
 
-CREATE TABLE media_types
+CREATE TABLE IF NOT EXISTS media_types
 (
     id int DEFAULT nextval('mediatypes_id_seq'::regclass) NOT NULL,
     name VARCHAR(120),
     CONSTRAINT pk_media_types PRIMARY KEY  (id)
 );
 
-CREATE TABLE playlists
+CREATE TABLE IF NOT EXISTS playlists
 (
     id int DEFAULT nextval('playlists_id_seq'::regclass) NOT NULL,
     name VARCHAR(120),
     CONSTRAINT pk_playlists PRIMARY KEY  (id)
 );
 
-CREATE TABLE playlist_track
+CREATE TABLE IF NOT EXISTS playlist_track
 (
     playlist_id INT NOT NULL,
     track_id INT NOT NULL,
     CONSTRAINT pk_playlist_track PRIMARY KEY  (playlist_id, track_id)
 );
 
-CREATE TABLE tracks
+CREATE TABLE IF NOT EXISTS tracks
 (
     id int DEFAULT nextval('tracks_id_seq'::regclass) NOT NULL,
     name VARCHAR(200) NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE tracks
 ALTER TABLE albums ADD CONSTRAINT fk_album_artist_id
     FOREIGN KEY (artist_id) REFERENCES artists (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-CREATE INDEX ifk_album_artist_id ON albums (artist_id);
+CREATE INDEX IF NOT EXISTS ifk_album_artist_id ON albums (artist_id);
 
 ALTER TABLE playlist_track ADD CONSTRAINT fk_playlist_track_playlist_id
     FOREIGN KEY (playlist_id) REFERENCES playlists (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -159,22 +159,22 @@ ALTER TABLE playlist_track ADD CONSTRAINT fk_playlist_track_playlist_id
 ALTER TABLE playlist_track ADD CONSTRAINT fk_playlist_track_track_id
     FOREIGN KEY (track_id) REFERENCES tracks (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-CREATE INDEX ifk_playlist_track_track_id ON playlist_track (track_id);
+CREATE INDEX IF NOT EXISTS ifk_playlist_track_track_id ON playlist_track (track_id);
 
 ALTER TABLE tracks ADD CONSTRAINT fk_track_album_id
     FOREIGN KEY (album_id) REFERENCES albums (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-CREATE INDEX ifk_track_album_id ON tracks (album_id);
+CREATE INDEX IF NOT EXISTS ifk_track_album_id ON tracks (album_id);
 
 ALTER TABLE tracks ADD CONSTRAINT fk_track_genre_id
     FOREIGN KEY (genre_id) REFERENCES genres (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-CREATE INDEX ifk_track_genre_id ON tracks (genre_id);
+CREATE INDEX IF NOT EXISTS ifk_track_genre_id ON tracks (genre_id);
 
 ALTER TABLE tracks ADD CONSTRAINT fk_track_media_type_id
     FOREIGN KEY (media_type_id) REFERENCES media_types (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-CREATE INDEX ifk_track_media_type_id ON tracks (media_type_id);
+CREATE INDEX IF NOT EXISTS ifk_track_media_type_id ON tracks (media_type_id);
 
 
 /*******************************************************************************
